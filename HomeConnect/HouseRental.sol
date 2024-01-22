@@ -47,6 +47,8 @@ struct Request {
     event RequestAccepted(address landlord,address tenant, uint256 housId);
     event HouseRented(uint256 rentalId, address tenant, address landlord, uint256 houseId, uint256 startDate, uint256 endDate);
     event RentalCompleted(uint256 rentalId, address tenant, uint256 houseId);
+    event RentPaid(uint256 rentalId,address tenant, uint256 amount);
+    event RentalCompleted(uint256 rentalId, address tenant);
 
 /////////////
 function listHouse(string memory description, uint256 rentPerDay, uint256 deposit,
@@ -71,14 +73,13 @@ function getAllHouses() public view returns(House[] memory){
 
     return houses ;
 }
-function getLandlordHouses() public view returns (House[] memory){
 
-    return landlordHouses[msg.sender] ;
-}
 //////////////////
 
 function  sendRequest (uint256 houseId,uint256 startDate, uint256 endDate) public {
     require(houses[houseId].isAvailable == 1, "House is not available");
+    uint256 rentalPeriod = startDate-endDate;
+    require(houses[houseId].maxRentalPeriod>rentalPeriod && rentalPeriod >houses[houseId].minRentalPeriod);
     address landlord = houses[houseId].landlord ; 
     uint256 requestId = requests[landlord].length ;
     requests[landlord].push(Request({requestId: requestId,tenant: msg.sender, houseId: houseId, startDate: startDate, endDate: endDate, isAccepted:0}));
@@ -110,9 +111,9 @@ function rentHouse(uint256 requestId, uint256 houseId, uint256 startDate, uint25
     require(msg.value == rentPerDay *paymentPeriod + deposit, "Incorrect payment ");
 
     // Convert seconds to days (86400 seconds in a day)
-    uint256 totalDays = (startDate - endDate) / 86400;
+    uint256 numberOfPeriods = ((startDate - endDate) / 86400/ paymentPeriod)+1;
     uint256 dueDate = startDate + paymentPeriod* 86400 ;
-    uint256 totalAmountDue = (totalDays - paymentPeriod) * rentPerDay ;
+    uint256 totalAmountDue = (numberOfPeriods-1)*paymentPeriod * rentPerDay ;
     uint256 rentalId = rentals.length;
     rentals.push(Rental({
         rentalId: rentalId,
@@ -132,27 +133,53 @@ function rentHouse(uint256 requestId, uint256 houseId, uint256 startDate, uint25
     payable(houses[houseId].landlord).transfer(msg.value - houses[houseId].deposit); // Pay rent to the landlord, keep deposit in the contract
     emit HouseRented(rentalId, msg.sender, landlord, houseId, startDate, endDate);
 }
-function updateRentalData(Rental memory rental) public {
 
-uint256 dueDate = rental.dueDate ;
-uint256 currentDate = block.timestamp ;
+function updateRentalData(address tenant) public  {
+    uint256 currentDate = block.timestamp ; 
+    for (uint256 i = 0; i < tenantRentals[tenant].length; i++) {
 
- while(currentDate >= dueDate){
-
-
- }
+        if(tenantRentals[tenant][i].isActive==1){
+            uint256 dueDate = tenantRentals[tenant][i].dueDate;
+            
+            while(currentDate > dueDate){
+                Rental memory rental = tenantRentals[tenant][i];
+                uint256 houseId = rental.houseId;
+                uint256 paymentPeriod = houses[houseId].paymentPeriod;
+                uint256 rentPerDay = houses[houseId].rentPerDay;
+                tenantRentals[tenant][i].dueDate+= paymentPeriod*86400;
+                tenantRentals[tenant][i].amountDue+= paymentPeriod*rentPerDay;
+                if(tenantRentals[tenant][i].dueDate>tenantRentals[tenant][i].endDate){
+                    tenantRentals[tenant][i].isActive=0;
+                    break;
+                }
+                dueDate = tenantRentals[tenant][i].dueDate;
+            }
+        }
+    }
+ 
 
 }
 
-function getRentalData() public view returns (Rental[] memory) {
- return tenantRentals[msg.sender];
- 
+function getRentalData() public returns (Rental[] memory) {
+
+   updateRentalData(msg.sender);
+   return tenantRentals[msg.sender]; 
 }
 
 function payRent(uint256 rentalId) public payable {
 
+    require(rentals[rentalId].amountDue > 0, "You don't have an amount due yet!");
+    uint256 houseId = rentals[rentalId].houseId;
+    payable(houses[houseId].landlord).transfer(msg.value);
+    rentals[rentalId].amountDue-=msg.value ;
+    rentals[rentalId].totalAmountDue-=msg.value ;
+    emit RentPaid(rentalId,msg.sender,msg.value);
 
+    if (rentals[rentalId].totalAmountDue==0){
+    payable(msg.sender).transfer(houses[houseId].deposit);    
+    emit RentalCompleted(rentalId, msg.sender);
 
+    }
 }
 
 //////////////

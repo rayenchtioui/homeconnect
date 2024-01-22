@@ -11,50 +11,6 @@
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "rentalId",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "tenant",
-						"type": "address"
-					}
-				],
-				"name": "DisputeRaised",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "rentalId",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "tenant",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "landlord",
-						"type": "address"
-					}
-				],
-				"name": "DisputeResolved",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "uint256",
 						"name": "houseId",
 						"type": "uint256"
 					},
@@ -81,6 +37,12 @@
 						"indexed": false,
 						"internalType": "address",
 						"name": "tenant",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "landlord",
 						"type": "address"
 					},
 					{
@@ -123,12 +85,278 @@
 					{
 						"indexed": false,
 						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "RentPaid",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "rentalId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tenant",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
 						"name": "houseId",
 						"type": "uint256"
 					}
 				],
 				"name": "RentalCompleted",
 				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "rentalId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tenant",
+						"type": "address"
+					}
+				],
+				"name": "RentalCompleted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "landlord",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tenant",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "housId",
+						"type": "uint256"
+					}
+				],
+				"name": "RequestAccepted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tenant",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					}
+				],
+				"name": "RequestSent",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					}
+				],
+				"name": "acceptRequest",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllHouses",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "houseId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "landlord",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "rentPerDay",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "deposit",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "paymentPeriod",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "minRentalPeriod",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "maxRentalPeriod",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "isAvailable",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct HouseRental.House[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getRentalData",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "rentalId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "tenant",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "houseId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startDate",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "endDate",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "dueDate",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amountDue",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "totalAmountDue",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "isActive",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct HouseRental.Rental[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getRequests",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "requestId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "tenant",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "houseId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "startDate",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "endDate",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "isAccepted",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct HouseRental.Request[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [
@@ -140,6 +368,11 @@
 				],
 				"name": "houses",
 				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "houseId",
+						"type": "uint256"
+					},
 					{
 						"internalType": "address",
 						"name": "landlord",
@@ -161,9 +394,24 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "bool",
+						"internalType": "uint256",
+						"name": "paymentPeriod",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "minRentalPeriod",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "maxRentalPeriod",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "isAvailable",
-						"type": "bool"
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -186,11 +434,130 @@
 				"outputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "houseId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "landlord",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rentPerDay",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deposit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "paymentPeriod",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "minRentalPeriod",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "maxRentalPeriod",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "isAvailable",
 						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rentPerDay",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deposit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "paymentPeriod",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "minRentalPeriod",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "maxRentalPeriod",
+						"type": "uint256"
+					}
+				],
+				"name": "listHouse",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "rentalId",
+						"type": "uint256"
+					}
+				],
+				"name": "payRent",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "houseId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endDate",
+						"type": "uint256"
+					}
+				],
+				"name": "rentHouse",
+				"outputs": [],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -203,6 +570,11 @@
 				],
 				"name": "rentals",
 				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "rentalId",
+						"type": "uint256"
+					},
 					{
 						"internalType": "address",
 						"name": "tenant",
@@ -224,17 +596,99 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "bool",
-						"name": "isActive",
-						"type": "bool"
+						"internalType": "uint256",
+						"name": "dueDate",
+						"type": "uint256"
 					},
 					{
-						"internalType": "bool",
-						"name": "isDisputed",
-						"type": "bool"
+						"internalType": "uint256",
+						"name": "amountDue",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalAmountDue",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "isActive",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "requests",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "tenant",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "houseId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "isAccepted",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "houseId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endDate",
+						"type": "uint256"
+					}
+				],
+				"name": "sendRequest",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -254,11 +708,64 @@
 				"outputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "rentalId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "tenant",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "houseId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dueDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountDue",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalAmountDue",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "isActive",
 						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tenant",
+						"type": "address"
+					}
+				],
+				"name": "updateRentalData",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -290,11 +797,11 @@
 	},
 	"sources": {
 		"HomeConnect/HouseRental.sol": {
-			"keccak256": "0xe188ea3ac8865dc2ad3e557fce3acf2716b46f26d4d1e7266b5cafe5b1ef8a28",
+			"keccak256": "0x01037b30c302d70d9014c2937583d78069cdec97dbf3bf7b044e7a4a95276a40",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://21095e4c5b54057fa0c73f49971672baf115c08a8f7e79b2d50d2d874a270ef6",
-				"dweb:/ipfs/QmUmjTrpRzg3KQxpsrR6fJHLChuhxfURBiJfZL1UN9hUX6"
+				"bzz-raw://a47f2fb6036b03d50dbf52198f0f1062aa8df5484d4e28c5453d072dda9e8988",
+				"dweb:/ipfs/QmajNiZEAYwT6D2ymdveD5UAgEcG8HVrW5hekKZb1Kukmw"
 			]
 		}
 	},
