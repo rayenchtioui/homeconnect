@@ -563,65 +563,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "rentals",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "rentalId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "tenant",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "houseId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "startDate",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "endDate",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "dueDate",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amountDue",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "totalAmountDue",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "isActive",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
@@ -797,11 +738,11 @@
 	},
 	"sources": {
 		"HomeConnect/HouseRental.sol": {
-			"keccak256": "0x01037b30c302d70d9014c2937583d78069cdec97dbf3bf7b044e7a4a95276a40",
+			"keccak256": "0x67b14fae8305e421e953f0668c4e7672f17c87f080b6cb7245c21b6efaf2b431",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a47f2fb6036b03d50dbf52198f0f1062aa8df5484d4e28c5453d072dda9e8988",
-				"dweb:/ipfs/QmajNiZEAYwT6D2ymdveD5UAgEcG8HVrW5hekKZb1Kukmw"
+				"bzz-raw://0ff255e84e2d8b9d702b76938c900f8a7362958de2c05bff6d82ef113b616594",
+				"dweb:/ipfs/QmTU8vkD1fW74wVxMRaE77sUxHhbXKW1iXLhvKgdhfzhaF"
 			]
 		}
 	},

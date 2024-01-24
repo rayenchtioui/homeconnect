@@ -37,7 +37,6 @@ struct Request {
     }   
 
     House[] public houses;
-    Rental[] public rentals;
     mapping(address => Request[]) public requests;
     mapping(address => House[]) public landlordHouses;
     mapping(address => Rental[]) public tenantRentals;
@@ -78,8 +77,9 @@ function getAllHouses() public view returns(House[] memory){
 
 function  sendRequest (uint256 houseId,uint256 startDate, uint256 endDate) public {
     require(houses[houseId].isAvailable == 1, "House is not available");
-    uint256 rentalPeriod = startDate-endDate;
-    require(houses[houseId].maxRentalPeriod>rentalPeriod && rentalPeriod >houses[houseId].minRentalPeriod);
+    uint256 rentalPeriod = (endDate-startDate)/60;
+
+    require(houses[houseId].maxRentalPeriod>rentalPeriod && rentalPeriod>houses[houseId].minRentalPeriod,"wrong rental period");
     address landlord = houses[houseId].landlord ; 
     uint256 requestId = requests[landlord].length ;
     requests[landlord].push(Request({requestId: requestId,tenant: msg.sender, houseId: houseId, startDate: startDate, endDate: endDate, isAccepted:0}));
@@ -111,11 +111,11 @@ function rentHouse(uint256 requestId, uint256 houseId, uint256 startDate, uint25
     require(msg.value == rentPerDay *paymentPeriod + deposit, "Incorrect payment ");
 
     // Convert seconds to days (86400 seconds in a day)
-    uint256 numberOfPeriods = ((startDate - endDate) / 86400/ paymentPeriod)+1;
-    uint256 dueDate = startDate + paymentPeriod* 86400 ;
+    uint256 numberOfPeriods = ((endDate - startDate) / 60/ paymentPeriod)+1;
+    uint256 dueDate = startDate + paymentPeriod* 60 ;
     uint256 totalAmountDue = (numberOfPeriods-1)*paymentPeriod * rentPerDay ;
-    uint256 rentalId = rentals.length;
-    rentals.push(Rental({
+    uint256 rentalId = tenantRentals[msg.sender].length;
+    tenantRentals[msg.sender].push(Rental({
         rentalId: rentalId,
         tenant: msg.sender,
         houseId: houseId,
@@ -127,7 +127,6 @@ function rentHouse(uint256 requestId, uint256 houseId, uint256 startDate, uint25
         isActive: 1
     }));
 
-    tenantRentals[msg.sender].push(rentals[rentalId]);
     houses[houseId].isAvailable = 0;
     
     payable(houses[houseId].landlord).transfer(msg.value - houses[houseId].deposit); // Pay rent to the landlord, keep deposit in the contract
@@ -146,7 +145,7 @@ function updateRentalData(address tenant) public  {
                 uint256 houseId = rental.houseId;
                 uint256 paymentPeriod = houses[houseId].paymentPeriod;
                 uint256 rentPerDay = houses[houseId].rentPerDay;
-                tenantRentals[tenant][i].dueDate+= paymentPeriod*86400;
+                tenantRentals[tenant][i].dueDate+= paymentPeriod*60;
                 tenantRentals[tenant][i].amountDue+= paymentPeriod*rentPerDay;
                 if(tenantRentals[tenant][i].dueDate>tenantRentals[tenant][i].endDate){
                     tenantRentals[tenant][i].isActive=0;
@@ -168,14 +167,14 @@ function getRentalData() public returns (Rental[] memory) {
 
 function payRent(uint256 rentalId) public payable {
 
-    require(rentals[rentalId].amountDue > 0, "You don't have an amount due yet!");
-    uint256 houseId = rentals[rentalId].houseId;
+    require(tenantRentals[msg.sender][rentalId].amountDue > 0, "You don't have an amount due yet!");
+    uint256 houseId = tenantRentals[msg.sender][rentalId].houseId;
     payable(houses[houseId].landlord).transfer(msg.value);
-    rentals[rentalId].amountDue-=msg.value ;
-    rentals[rentalId].totalAmountDue-=msg.value ;
+    tenantRentals[msg.sender][rentalId].amountDue-=msg.value ;
+    tenantRentals[msg.sender][rentalId].totalAmountDue-=msg.value ;
     emit RentPaid(rentalId,msg.sender,msg.value);
 
-    if (rentals[rentalId].totalAmountDue==0){
+    if (tenantRentals[msg.sender][rentalId].totalAmountDue==0){
     payable(msg.sender).transfer(houses[houseId].deposit);    
     emit RentalCompleted(rentalId, msg.sender);
 
