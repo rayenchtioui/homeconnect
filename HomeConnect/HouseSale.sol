@@ -119,4 +119,31 @@ contract HouseSale {
         resetApproval(_houseId);
         emit ListingCancelled(_houseId);
     }
+
+    function listHousesForSale() public view returns (uint256[] memory, string[] memory, uint256[] memory) {
+    uint256 forSaleCount = 0;
+
+    for (uint256 i = 1; i <= houseCount; i++) {
+        if (houses[i].isForSale) {
+            forSaleCount++;
+        }
+    }
+
+    uint256[] memory ids = new uint256[](forSaleCount);
+    string[] memory locations = new string[](forSaleCount);
+    uint256[] memory prices = new uint256[](forSaleCount);
+
+    uint256 currentIndex = 0;
+
+    for (uint256 i = 1; i <= houseCount; i++) {
+        if (houses[i].isForSale) {
+            ids[currentIndex] = houses[i].id;
+            locations[currentIndex] = houses[i].location;
+            prices[currentIndex] = houses[i].price;
+            currentIndex++;
+        }
+    }
+
+    return (ids, locations, prices);
+}
 }
